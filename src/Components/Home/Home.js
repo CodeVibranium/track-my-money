@@ -1,6 +1,7 @@
-import { Row, Col } from "antd";
+import { Row, Col, Tabs, Card } from "antd";
 import Signup from "./Signup";
-
+import Login from "./Login";
+const { TabPane } = Tabs;
 const Home = () => {
   return (
     <Row>
@@ -13,8 +14,17 @@ const Home = () => {
               </h1>
             </div>
           </Col>
-          <Col span={12}>
-            <Signup />
+          <Col span={10}>
+            <Card>
+              <Tabs defaultActiveKey="Login">
+                <TabPane tab="Log In" key="Login">
+                  <Login />
+                </TabPane>
+                <TabPane tab="Sign Up" key="Signup">
+                  <Signup />
+                </TabPane>
+              </Tabs>
+            </Card>
           </Col>
         </div>
       </Col>
