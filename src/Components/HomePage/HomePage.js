@@ -44,8 +44,8 @@ const Homepage = () => {
         </Header>
       </Layout>
       <Row>
-        <Col span={18}>Show transactions</Col>
-        <Col span={6}>
+        <Col span={16}>Show transactions</Col>
+        <Col span={8}>
           <Transactionform />
         </Col>
       </Row>
