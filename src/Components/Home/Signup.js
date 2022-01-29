@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import { auth } from "../../Firebase/firebase.config";
-import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from "../../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 const Signup = () => {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const Auth = useAuth();
+  const navigate = useNavigate();
 
-  onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser);
-  });
   const handleLogIn = async (values) => {
     setLoading(true);
     try {
@@ -21,11 +19,12 @@ const Signup = () => {
         values.Password,
         values.userName
       );
+      Auth.signup(user);
       setLoading(false);
+      navigate("/home");
       message.success(`${values.userName} Logged In`);
     } catch (error) {
-      console.log(error.message);
-      message.error(error.message);
+      setErrorMessage(error.message);
       setLoading(false);
     }
   };
@@ -45,6 +44,7 @@ const Signup = () => {
           Sign up
         </Button>
       </Form.Item>
+      {errorMessage && <p>{errorMessage}</p>}
     </Form>
   );
 };

@@ -1,20 +1,17 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { auth } from "../../Firebase/firebase.config";
-import {
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { Row, Col, Form, Input, Button, Card, message } from "antd";
 import { setItem } from "../../LocalStorage";
+import { useAuth } from "../../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   //states
-  const [user, setUser] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const Auth = useAuth();
+  const navigate = useNavigate();
 
-  onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser);
-  });
   const handleSubmit = async (values) => {
     setLoading(true);
     var user;
@@ -26,10 +23,11 @@ const Login = () => {
         values.Password
       );
       setLoading(false);
-      message.success("Sign In successful");
+      Auth.login(user);
+      navigate("/home");
     } catch (error) {
       setLoading(false);
-      message.error(error.message);
+      setErrorMessage(error.message);
     }
 
     let userEmail = String(user.user.email);
@@ -51,6 +49,7 @@ const Login = () => {
               Log In
             </Button>
           </Form.Item>
+          {errorMessage && <p>{errorMessage}</p>}
         </Form>
       </Col>
     </Row>

@@ -5,3 +5,6 @@ export const getItem = (key) => {
   const value = localStorage.getItem(key);
   return value;
 };
+export const clearItem = () => {
+  localStorage.clear();
+};
