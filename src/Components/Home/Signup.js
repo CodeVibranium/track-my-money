@@ -4,6 +4,8 @@ import { auth } from "../../Firebase/firebase.config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useAuth } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../Firebase/firebase.config";
 const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -22,6 +24,16 @@ const Signup = () => {
       Auth.signup(user);
       setLoading(false);
       navigate("/home");
+
+      const addUser = await setDoc(
+        doc(db, "Users", String(user._tokenResponse.localId)),
+        {
+          Amout: 0,
+          Description: "",
+          Type: "",
+        }
+      );
+      console.log(addUser, "user add");
       message.success(`${values.userName} Logged In`);
     } catch (error) {
       setErrorMessage(error.message);
